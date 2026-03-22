@@ -19,23 +19,23 @@ lang: zh
 ![sequence diagram of token-based authentication](../../images/4/16new.png)
 
 <!-- - User starts by logging in using a login form implemented with React-->
- - 用户通过使用React实现的登录表单开始登录
+- 用户通过使用React实现的登录表单开始登录
 <!--     - We will add the login form to the frontend in [part 5](/en/part5)-->
- - 我们将在[第五章节](/en/part5)中把登录表单添加到前端。
+    - 我们将在[第五章节](/en/part5)中把登录表单添加到前端。
 <!-- - This causes the React code to send the username and the password to the server address <i>/api/login</i> as a HTTP POST request.-->
- - 这使得React代码将用户名和密码作为HTTP POST请求发送到服务器地址<i>/api/login</i>。
+- 这使得React代码将用户名和密码作为HTTP POST请求发送到服务端地址<i>/api/login</i>。
 <!-- - If the username and the password are correct, the server generates a <i>token</i> which somehow identifies the logged in user.-->
- - 如果用户名和密码正确，服务器会生成一个<i>token</i>，以某种方式识别登录的用户。
+- 如果用户名和密码正确，服务端会生成一个<i>token</i>，以某种方式识别登录的用户。
 <!--     - The token is signed digitally, making it impossible to falsify (with cryptographic means)-->
- - 令牌经过数字签名，使其不可能被伪造（用密码学手段）。
+    - 令牌经过数字签名，使其不可能被伪造（用密码学手段）。
 <!-- - The backend responds with a status code indicating the operation was successful, and returns the token with the response.-->
- - 后端以一个状态代码响应，表明操作成功，并将令牌与响应一起返回。
+- 后端以一个状态代码响应，表明操作成功，并将令牌与响应一起返回。
 <!-- - The browser saves the token, for example to the state of a React application.-->
- - 浏览器保存令牌，例如保存到React应用的状态中。
+- 浏览器保存令牌，例如保存到React应用的状态中。
 <!-- - When the user creates a new note (or does some other operation requiring identification), the React code sends the token to the server with the request.-->
- - 当用户创建一个新的笔记（或做一些其他需要识别的操作），React代码将令牌与请求一起发送到服务器。
+- 当用户创建一个新的笔记（或做一些其他需要识别的操作），React代码将令牌与请求一起发送到服务端。
 <!-- - The server uses the token to identify the user-->
- - 服务器使用该令牌来识别用户
+- 服务端使用该令牌来识别用户
 
 <!-- Let's first implement the functionality for logging in. Install the [jsonwebtoken](https://github.com/auth0/node-jsonwebtoken) library, which allows us to generate [JSON web tokens](https://jwt.io/).-->
  让我们首先实现登录的功能。安装[jsonwebtoken](https://github.com/auth0/node-jsonwebtoken)库，它允许我们生成[JSON web tokens](https://jwt.io/)。
@@ -83,14 +83,14 @@ module.exports = loginRouter
 ```
 
 - 用户开始通过使用React实现的登录表单进行登录
-    - 我们将在[第5部分](/en/part5)中将登录表单添加到前端
-- 这会导致React代码将用户名和密码作为HTTP POST请求发送到服务器地址<i>/api/login</i>。
-- 如果用户名和密码正确，服务器会生成一个以某种方式识别已登录用户的<i>token</i>。
+    - 我们将在[第5章节](/en/part5)中将登录表单添加到前端
+- 这会导致React代码将用户名和密码作为HTTP POST请求发送到服务端地址<i>/api/login</i>。
+- 如果用户名和密码正确，服务端会生成一个以某种方式识别已登录用户的<i>token</i>。
     - 该token被数字签名，使其无法伪造（通过密码学手段）
 - 后端以状态码响应，表示操作成功，并在响应中返回token。
 - 浏览器保存token，例如保存到React应用的状态中。
-- 当用户创建新的笔记（或进行其他需要身份验证的操作）时，React代码将请求一起将token发送到服务器。
-- 服务器使用token来识别用户
+- 当用户创建新的笔记（或进行其他需要身份验证的操作）时，React代码将请求一起将token发送到服务端。
+- 服务端使用token来识别用户
 
 <!-- The code starts by searching for the user from the database by the <i>username</i> attached to the request. -->
 代码首先通过请求中附带的<i>username</i>从数据库中搜索用户。
@@ -200,8 +200,8 @@ app.use('/api/login', loginRouter)
 
 <!-- There are several ways of sending the token from the browser to the server. We will use the [Authorization](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Authorization) header. The header also tells which [authentication scheme](https://developer.mozilla.org/en-US/docs/Web/HTTP/Authentication#Authentication_schemes) is used. This can be necessary if the server offers multiple ways to authenticate.
 Identifying the scheme tells the server how the attached credentials should be interpreted. -->
-将token从浏览器发送到服务器有几种方法。我们将使用[Authorization](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/Authorization)头。该头还告诉我们使用了哪种[认证方案](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Authentication#Authentication_schemes)。如果服务器提供了多种认证方式，这可能是必要的。
-识别方案告诉服务器应如何解释附加的凭据。
+将token从浏览器发送到服务端有几种方法。我们将使用[Authorization](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/Authorization)头。该头还告诉我们使用了哪种[认证方案](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Authentication#Authentication_schemes)。如果服务端提供了多种认证方式，这可能是必要的。
+识别方案告诉服务端应如何解释附加的凭据。
 
 <!-- The <i>Bearer</i> scheme is suitable for our needs. -->
 <i>Bearer</i> 方案适合我们的需求。
@@ -282,7 +282,7 @@ const errorHandler = (error, request, response, next) => {
 ```
 
 <!-- The object decoded from the token contains the <i>username</i> and <i>id</i> fields, which tell the server who made the request. -->
-从token解码的对象包含<i>username</i>和<i>id</i>字段，这些字段告诉服务器是谁发出的请求。
+从token解码的对象包含<i>username</i>和<i>id</i>字段，这些字段告诉服务端是谁发出的请求。
 
 <!-- If the object decoded from the token does not contain the user's identity (_decodedToken.id_ is undefined), error status code [401 unauthorized](https://www.rfc-editor.org/rfc/rfc9110.html#name-401-unauthorized) is returned and the reason for the failure is explained in the response body. -->
 如果从token解码的对象不包含用户的身份（_decodedToken.id_未定义），则返回错误状态码[401 unauthorized](https://www.rfc-editor.org/rfc/rfc9110.html#name-401-unauthorized)，并在响应体中解释失败的原因。
@@ -320,7 +320,7 @@ if (!decodedToken.id) {
 ### Problems of Token-based authentication
 
 <!-- Token authentication is pretty easy to implement, but it contains one problem. Once the API user, eg. a React app gets a token, the API has a blind trust to the token holder. What if the access rights of the token holder should be revoked?-->
- Token认证是很容易实现的，但它包含一个问题。一旦API用户，例如React应用得到一个令牌，API就会对令牌持有者产生盲目信任。如果令牌持有者的访问权被撤销了怎么办？
+Token认证是很容易实现的，但它包含一个问题。一旦API用户，例如React应用得到一个令牌，API就会对令牌持有者产生盲目信任。如果需要撤销令牌持有者的访问权怎么办？
 
 <!-- There are two solutions to the problem. Easier one is to limit the validity period of a token:-->
 这个问题有两种解决方案。比较简单的是限制令牌的有效期。
@@ -391,30 +391,27 @@ const errorHandler = (error, request, response, next) => {
 ```
 
 <!-- The shorter the expiration time, the more safe the solution is. So if the token gets into wrong hands, or the user access to the system needs to be revoked, the token is usable only a limited amount of time. On the other hand, a short expiration time forces a potential pain to a user, one must login to the system more frequently.-->
-过期时间越短，解决方案就越安全。所以如果令牌落入坏人之手，或者用户对系统的访问需要被撤销，令牌只能在有限的时间内使用。另一方面，过期时间短会给用户带来潜在的痛苦，用户必须更频繁地登录系统。
+过期时间越短，解决方案就越安全。所以如果令牌落入坏人之手，或者需要撤销用户访问系统的权限，令牌只能在有限的时间内使用。另一方面，过期时间短会给用户带来潜在的痛苦，用户必须更频繁地登录系统。
 
 <!-- The other solution is to save info about each token to backend database and to check for each API request if the access right corresponding to the token is still valid. With this scheme, the access rights can be revoked at any time. This kind of solution is often called a <i>server side session</i>.-->
- 另一个解决方案是将每个令牌的信息保存在后端数据库中，并为每个API请求检查该令牌对应的访问权是否仍然有效。通过这种方案，访问权可以在任何时候被撤销。这种方案通常被称为<i>服务器端会话</i>。
+ 另一个解决方案是将每个令牌的信息保存在后端数据库中，并为每个API请求检查该令牌对应的访问权是否仍然有效。通过这种方案，访问权可以在任何时候被撤销。这种方案通常被称为<i>服务端会话</i>。
 
 <!-- The negative aspect of server side sessions is the increased complexity in the backend and also the effect on performance since the token validity needs to be checked for each API request from database. A database access is considerably slower compared to checking the validity from the token itself. That is why it is a quite common to save the session corresponding to a token to a <i>key-value-database</i> such as [Redis](https://redis.io/) that is limited in functionality compared to eg. MongoDB or relational database but extremely fast in some usage scenarios.-->
- 服务器端会话的消极方面是增加了后端的复杂性，也影响了性能，因为需要对每个API请求到数据库的token有效性进行检查数据库访问相比检查token本身的有效性要慢得多。这就是为什么将一个token对应的会话保存到一个<i>键-值数据库</i>（如[Redis](https://redis.io/)）是很常见的，与MongoDB或关系型数据库相比，其功能有限，但在某些使用场景下速度极快。
+ 服务端会话的消极方面是增加了后端的复杂性，也影响了性能，因为需要对每个API请求到数据库的token有效性进行检查数据库访问相比检查token本身的有效性要慢得多。这就是为什么将一个token对应的会话保存到一个<i>键-值数据库</i>（如[Redis](https://redis.io/)）是很常见的，与MongoDB或关系型数据库相比，其功能有限，但在某些使用场景下速度极快。
 
 <!-- When server side sessions are used, the token is quite often just a random string, that does not include any information about the user as it is quite often the case when jwt-tokens are used. For each API request the server fetches the relevant information about the identity of the user from the database. It is also quite usual that instead of using Authorization-header, <i>cookies</i> are used as the mechanism for transferring the token between the client and the server.-->
- 当使用服务器端会话时，令牌通常只是一个随机字符串，不包括关于用户的任何信息，因为在使用jwt令牌时通常是这样的。对于每个API请求，服务器从数据库中获取有关用户身份的相关信息。另外，通常不使用授权头，而是使用<i>cookies</i>作为客户端和服务器之间传输令牌的机制。
+ 当使用服务端会话时，令牌通常只是一个随机字符串，不包括关于用户的任何信息，因为在使用jwt令牌时通常是这样的。对于每个API请求，服务端从数据库中获取有关用户身份的相关信息。另外，通常不使用授权头，而是使用<i>cookies</i>作为客户端和服务端之间传输令牌的机制。
 
 ### End notes
 
 <!-- There have been many changes to the code which have caused a typical problem for a fast-paced software project: most of the tests have broken. Because this part of the course is already jammed with new information, we will leave fixing the tests to a non compulsory exercise.-->
-代码有很多变化，这对一个快节奏的软件项目来说，造成了一个典型的问题：大多数测试都坏了。由于课程的这一部分已经充斥着新信息，我们将把修复测试留作一个非强制性的练习。
+代码有很多变化，这对一个快节奏的软件项目来说，造成了一个典型的问题：大多数测试都坏了。由于课程的这一章节已经充斥着新信息，我们将把修复测试留作一个非强制性的练习。
 
 <!-- Usernames, passwords and applications using token authentication must always be used over [HTTPS](https://en.wikipedia.org/wiki/HTTPS). We could use a Node [HTTPS](https://nodejs.org/docs/latest-v18.x/api/https.html) server in our application instead of the [HTTP](https://nodejs.org/docs/latest-v18.x/api/http.html) server (it requires more configuration). On the other hand, the production version of our application is in Fly.io, so our application stays secure: Fly.io routes all traffic between a browser and the Fly.io server over HTTPS. -->
- 使用token认证的用户名、密码和应用程序必须始终通过[HTTPS](https://en.wikipedia.org/wiki/HTTPS)使用。我们可以在我们的应用程序中使用Node [HTTPS](https://nodejs.org/docs/latest-v18.x/api/https.html)服务器（它需要更多的配置），而不是[HTTP](https://nodejs.org/docs/latest-v18.x/api/http.html)服务器。另一方面，我们应用程序的生产版本在Fly.io上，所以我们的应用程序保持安全：Fly.io将浏览器和Fly.io服务器之间的所有流量通过HTTPS路由。
+使用token认证的用户名、密码和应用程序必须始终通过[HTTPS](https://en.wikipedia.org/wiki/HTTPS)使用。我们可以在我们的应用程序中使用Node [HTTPS](https://nodejs.org/docs/latest-v18.x/api/https.html)服务端（它需要更多的配置），而不是[HTTP](https://nodejs.org/docs/latest-v18.x/api/http.html)服务端。另一方面，我们应用程序的生产版本在Fly.io上，所以我们的应用程序保持安全：Fly.io将浏览器和Fly.io服务器之间的所有流量通过HTTPS路由。
 
 <!-- We will implement login to the frontend in the [next part](/en/part5).-->
- 我们将在[下一部分](/en/part5)中实现对前端的登录。
-
-<!-- **NOTE:** At this stage, in the deployed notes app, it is expected that the creating a note feature will stop working as the backend login feature is not yet linked to the frontend. -->
-**注意：**在这个阶段，在部署的笔记应用中，预计创建笔记的功能将停止工作，因为后端登录功能尚未与前端链接。
+我们将在[下一章节](/zh/part5)中实现登录的前端。
 
 </div>
 
@@ -423,21 +420,21 @@ const errorHandler = (error, request, response, next) => {
 ### Exercises 4.15.-4.23.
 
 <!-- In the next exercises, basics of user management will be implemented for the Bloglist application. The safest way is to follow the story from part 4 chapter [User administration](/en/part4/user_administration) to the chapter [Token-based authentication](/en/part4/token_authentication). You can of course also use your creativity.-->
- 在接下来的练习中，将为Bloglist应用实现用户管理的基础知识。最安全的方法是从第四章节的[用户管理](/en/part4/user_administration)到[基于令牌的认证](/en/part4/token_authentication)这一章的故事。当然，你也可以发挥你的创造力。
+在接下来的练习中，我们将为Bloglist应用实现基本的用户管理。最安全的方法是照着教材第4章节的[用户管理](/en/part4/user_administration)到[基于令牌的认证](/en/part4/token_authentication)做。当然，你也可以发挥你的创造力。
 
 <!-- **One more warning:** If you notice you are mixing async/await and _then_ calls, it is 99% certain you are doing something wrong. Use either or, never both.-->
- **还有一个警告：**如果你注意到你在混合使用async/await和_then_调用，那么99%肯定是你做错了什么。使用其中之一，而不是同时使用。
+**再次警告：**如果你注意到你在混合使用async/await和_then_调用，那么99%肯定是你做错了什么。使用其中之一，而不是同时使用。
 
 #### 4.15: Blog List Expansion, step3
 
 <!-- Implement a way to create new users by doing a HTTP POST-request to address <i>api/users</i>. Users have <i>username, password and name</i>.-->
- 实现一种创建新用户的方法，通过HTTP POST-request来解决<i>api/users</i>。用户有<i>用户名、密码和姓名</i>。
+实现一种创建新用户的方法，通过HTTP POST请求来解决<i>api/users</i>。用户有<i>用户名、密码和姓名</i>。
 
 <!-- Do not save passwords to the database as clear text, but use the <i>bcrypt</i> library like we did in part 4 chapter [Creating new users](/en/part4/user_administration#creating-users).-->
  不要将密码以明文形式保存到数据库中，而是使用<i>bcrypt</i>库，就像我们在第四章节[创建新用户](/en/part4/user_administration#creating-users)中所做的那样。
 
 <!-- **NB** Some Windows users have had problems with <i>bcrypt</i>. If you run into problems, remove the library with command-->
- **NB** 一些Windows用户在使用<i>bcrypt</i>时遇到问题。如果你遇到问题，请用命令删除该库
+**注** 一些Windows用户在使用<i>bcrypt</i>时遇到过问题。如果你遇到问题，请用命令删除该库
 
 ```bash
 npm uninstall bcrypt
@@ -625,6 +622,6 @@ router.post('/', userExtractor, async (request, response) => {
  [这个](https://github.com/visionmedia/supertest/issues/398)在做修复时很可能有用。
 
 <!-- This is the last exercise for this part of the course and it's time to push your code to GitHub and mark all of your finished exercises to the [exercise submission system](https://studies.cs.helsinki.fi/stats/courses/fullstackopen).-->
- 这是这部分课程的最后一个练习，是时候把你的代码推送到GitHub，并把你所有完成的练习标记到[练习提交系统](https://studies.cs.helsinki.fi/stats/courses/fullstackopen)。
+ 这是这章节课程的最后一个练习，是时候把你的代码推送到GitHub，并把你所有完成的练习标记到[练习提交系统](https://studies.cs.helsinki.fi/stats/courses/fullstackopen)。
 
 </div>

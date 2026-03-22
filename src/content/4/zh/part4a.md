@@ -7,45 +7,44 @@ lang: zh
 
 <div class="content">
 
-
 <!-- Let's continue our work on the backend of the notes application we started in [part 3](/en/part3).-->
- 让我们继续我们在[第三章节](/zh/part3)中开始的笔记应用的后端工作。
+让我们继续我们在[第 3 章节](/zh/part3)中开始的笔记应用的后端工作。
 
+<!-- ### Project structure -->
+### 项目结构
 
-### Project structure
-
-<!-- **Note** this course material was written with version v20.11.0 of Node.js. Please make sure that your version of Node is at least as new as the version used in the material (you can check the version by running node -v in the command line). -->
-请注意，本课程材料是使用 Node.js v20.11.0 版本编写的。请确保您的 Node 版本至少与材料中使用的版本一样新（您可以通过在命令行中运行 node -v 来检查版本）。
+<!-- **Note**: this course material was written with version v22.3.0 of Node.js. Please make sure that your version of Node is at least as new as the version used in the material (you can check the version by running _node -v_ in the command line). -->
+**注意**：本教材是用 Node.js v22.3.0 版本编写的。请确保你的 Node 版本至少与教材中使用的版本一样新（你可以通过在命令行中运行 _node -v_ 来检查版本）。
 
 <!-- Before we move into the topic of testing, we will modify the structure of our project to adhere to Node.js best practices.-->
- 在我们进入测试主题之前，我们将修改我们项目的结构以遵守Node.js的最佳实践。
+在我们开始测试的主题之前，我们将修改我们项目的结构来遵守 Node.js 的最佳实践。
 
 <!-- After making the changes to the directory structure of our project, we end up with the following structure:-->
- 在对我们项目的目录结构进行修改后，我们最终得到以下结构。
+修改完毕的项目目录结构将如下：
 
 ```bash
-├── index.js
-├── app.js
-├── build
-│   └── ...
 ├── controllers
 │   └── notes.js
+├── dist
+│   └── ...
 ├── models
 │   └── note.js
-├── package-lock.json
-├── package.json
 ├── utils
 │   ├── config.js
 │   ├── logger.js
 │   └── middleware.js
+├── app.js
+├── index.js
+├── package-lock.json
+├── package.json
 ```
 
 <!-- So far we have been using <i>console.log</i> and <i>console.error</i> to print different information from the code.-->
- 到目前为止，我们一直使用<i>console.log</i>和<i>console.error</i>来打印代码中的不同信息。
+目前为止，我们一直使用 <i>console.log</i> 和 <i>console.error</i> 来打印代码中的各种信息。
 <!-- However, this is not a very good way to do things.-->
- 然而，这并不是一个很好的方法。
+然而，这并不是一个很好的方法。
 <!-- Let's separate all printing to the console to its own module <i>utils/logger.js</i>:-->
- 让我们把所有打印到控制台的工作分离到自己的模块<i>utils/logger.js</i>。
+让我们把所有打印到控制台的工作分离到自己的模块 <i>utils/logger.js</i>。
 
 ```js
 const info = (...params) => {
@@ -62,32 +61,13 @@ module.exports = {
 ```
 
 <!-- The logger has two functions, __info__ for printing normal log messages, and __error__ for all error messages.-->
- 记录器有两个函数，__info__用于打印正常的日志信息，__error__用于所有的错误信息。
+logger 有两个函数，__info__ 用于打印正常的日志信息，__error__ 用于打印所有的错误信息。
 
 <!-- Extracting logging into its own module is a good idea in more ways than one. If we wanted to start writing logs to a file or send them to an external logging service like [graylog](https://www.graylog.org/) or [papertrail](https://papertrailapp.com) we would only have to make changes in one place.-->
- 将日志提取到自己的模块中是一个好主意，而且不止一个方面。如果我们想开始将日志写入文件或将它们发送到外部日志服务，如 [graylog](https://www.graylog.org/) 或 [papertrail](https://papertrailapp.com) 我们只需要在一个地方进行修改。
-
-<!-- The contents of the <i>index.js</i> file used for starting the application gets simplified as follows:-->
- 用于启动应用的<i>index.js</i>文件的内容被简化如下。
-
-```js
-const app = require('./app') // the actual Express application
-const http = require('http')
-const config = require('./utils/config')
-const logger = require('./utils/logger')
-
-const server = http.createServer(app)
-
-server.listen(config.PORT, () => {
-  logger.info(`Server running on port ${config.PORT}`)
-})
-```
-
-<!-- The <i>index.js</i> file only imports the actual application from the <i>app.js</i> file and then starts the application. The function _info_ of the logger-module is used for the console printout telling that the application is running.-->
- <i>index.js</i>文件只从<i>app.js</i>文件中导入实际应用，然后启动应用。logger-module的函数_info_用于控制台打印输出，告诉人们应用正在运行。
+将日志提取到自己的模块中在多方面都是明智的。如果我们想开始将日志写入文件或将它们发送到外部日志服务，如 [graylog](https://www.graylog.org/) 或 [papertrail](https://papertrailapp.com)，我们只需要修改一个地方就可以了。
 
 <!-- The handling of environment variables is extracted into a separate <i>utils/config.js</i> file:-->
- 对环境变量的处理被提取到一个单独的<i>utils/config.js</i>文件中。
+对环境变量的处理被提取到专门的 <i>utils/config.js</i> 文件中。
 
 ```js
 require('dotenv').config()
@@ -95,14 +75,11 @@ require('dotenv').config()
 const PORT = process.env.PORT
 const MONGODB_URI = process.env.MONGODB_URI
 
-module.exports = {
-  MONGODB_URI,
-  PORT
-}
+module.exports = { MONGODB_URI, PORT }
 ```
 
 <!-- The other parts of the application can access the environment variables by importing the configuration module:-->
- 应用的其他部分可以通过导入配置模块访问环境变量。
+应用的其他部分导入配置模块后即可访问环境变量。
 
 ```js
 const config = require('./utils/config')
@@ -111,10 +88,10 @@ logger.info(`Server running on port ${config.PORT}`)
 ```
 
 <!-- The route handlers have also been moved into a dedicated module. The event handlers of routes are commonly referred to as <i>controllers</i>, and for this reason we have created a new <i>controllers</i> directory. All of the routes related to notes are now in the <i>notes.js</i> module under the <i>controllers</i> directory.-->
- 路由处理程序也被移到一个专门的模块中。路由的事件处理程序通常被称为<i>controllers</i>，为此我们创建了一个新的<i>controllers</i>目录。所有与notes相关的路由现在都在<i>controllers</i>目录下的<i>notes.js</i>模块中。
+路由处理函数也被移到一个专门的模块中。路由的事件处理函数通常被称为 <i>controllers</i>，因此我们创建了一个新的 <i>controllers</i> 目录。所有与 notes 相关的路由现在都在 <i>controllers</i> 目录下的 <i>notes.js</i> 模块中。
 
 <!-- The contents of the <i>notes.js</i> module are the following:-->
- <i>notes.js</i>模块的内容如下。
+<i>notes.js</i> 模块的内容如下。
 
 ```js
 const notesRouter = require('express').Router()
@@ -162,16 +139,20 @@ notesRouter.delete('/:id', (request, response, next) => {
 })
 
 notesRouter.put('/:id', (request, response, next) => {
-  const body = request.body
+  const { content, important } = request.body
 
-  const note = {
-    content: body.content,
-    important: body.important,
-  }
+  Note.findById(request.params.id)
+    .then(note => {
+      if (!note) {
+        return response.status(404).end()
+      }
 
-  Note.findByIdAndUpdate(request.params.id, note, { new: true })
-    .then(updatedNote => {
-      response.json(updatedNote)
+      note.content = content
+      note.important = important
+
+      return note.save().then((updatedNote) => {
+        response.json(updatedNote)
+      })
     })
     .catch(error => next(error))
 })
@@ -180,10 +161,10 @@ module.exports = notesRouter
 ```
 
 <!-- This is almost an exact copy-paste of our previous <i>index.js</i> file.-->
-这几乎是我们之前的<i>index.js</i>文件的完全复制粘贴。
+这基本上就是我们之前 <i>index.js</i> 文件的复制粘贴。
 
 <!-- However, there are a few significant changes. At the very beginning of the file we create a new [router](http://expressjs.com/en/api.html#router) object:-->
- 然而，有几个重要的变化。在文件的最开始，我们创建了一个新的[router](http://expressjs.com/en/api.html#router)对象。
+然而，有几个重要的变化。在文件的最开始，我们创建了一个新的 [router](http://expressjs.com/en/api.html#router) 对象：
 
 ```js
 const notesRouter = require('express').Router()
@@ -194,38 +175,36 @@ module.exports = notesRouter
 ```
 
 <!-- The module exports the router to be available for all consumers of the module.-->
- 该模块导出了路由器，以便对该模块的所有消费者可用。
-
+该模块导出了该 router，使得该 router 对模块的所有用户可用。
 
 <!-- All routes are now defined for the router object, in a similar fashion to what we had previously done with the object representing the entire application.-->
-现在所有的路由都是为路由器对象定义的，与我们之前对代表整个应用的对象所做的类似。
-
+现在所有的路由都是为 router 对象定义的，与我们之前对代表整个应用的对象所做的类似。
 
 <!-- It's worth noting that the paths in the route handlers have shortened. In the previous version, we had:-->
- 值得注意的是，路由处理程序中的路径已经缩短。在以前的版本中，我们有。
+值得注意的是，路由处理函数中的路径缩短了。在以前的版本中，我们写的是：
 
 ```js
 app.delete('/api/notes/:id', (request, response) => {
 ```
 
 <!-- And in the current version, we have:-->
- 而在当前版本中，我们有。
+而在当前版本中，我们写的是：
 
 ```js
 notesRouter.delete('/:id', (request, response) => {
 ```
 
 <!-- So what are these router objects exactly? The Express manual provides the following explanation:-->
- 那么这些路由器对象到底是什么？Express手册提供了以下解释。
+那么这些 router 对象到底是什么？Express 教程是这么解释的：
 
 <!-- > <i>A router object is an isolated instance of middleware and routes. You can think of it as a “mini-application,” capable only of performing middleware and routing functions. Every Express application has a built-in app router.</i>-->
- > <i>一个路由器对象是一个孤立的中间件和路由实例。你可以把它看作是一个 "小型应用"，只能够执行中间件和路由功能。每个Express应用都有一个内置的应用路由器。</i>
+> <i>一个 router 对象是一个孤立的中间件和路由实例。你可以把它看作是一个只能够执行中间件和路由功能的“小型应用”。每个 Express 应用都有一个内置的 app router。</i>
 
 <!-- The router is in fact a <i>middleware</i>, that can be used for defining "related routes" in a single place, that is typically placed in its own module.-->
- 路由器实际上是一个<i>中间件</i>，它可以用来在一个地方定义 "相关的路由"，它通常被放在自己的模块中。
+router 实际上是一个<i>中间件</i>，它可以用来在一个地方定义“相关的路由”，它通常被放在自己的模块中。
 
 <!-- The <i>app.js</i> file that creates the actual application, takes the router into use as shown below:-->
- 创建实际应用的<i>app.js</i>文件使用了路由器，如下所示。
+ 创建实际应用的 <i>app.js</i> 文件使用了 router ，如下所示。
 
 ```js
 const notesRouter = require('./controllers/notes')
@@ -233,11 +212,10 @@ app.use('/api/notes', notesRouter)
 ```
 
 <!-- The router we defined earlier is used <i>if</i> the URL of the request starts with <i>/api/notes</i>. For this reason, the notesRouter object must only define the relative parts of the routes, i.e. the empty path <i>/</i> or just the parameter <i>/:id</i>.-->
- 我们之前定义的路由器被使用，<i>如果</i>请求的URL以<i>/api/notes</i>开头。由于这个原因，notesRouter对象必须只定义路由的相对部分，即空的路径<i>/</i>或只定义参数<i>/:id</i>。
-
+<i>如果</i>请求的 URL 以 <i>/api/notes</i> 开头，就会使用我们之前定义的 router 。由于这个原因，notesRouter 对象必须只定义路由的相对部分，即空的路径 <i>/</i> 或只定义参数 <i>/:id</i>。
 
 <!-- After making these changes, our <i>app.js</i> file looks like this:-->
- 做了这些改动后，我们的<i>app.js</i>文件看起来是这样的。
+做了这些改动后，我们的 <i>app.js</i> 文件看起来是这样的。
 
 ```js
 const config = require('./utils/config')
@@ -440,7 +418,7 @@ app.use('/api/notes', notesRouter)
 ```
 
 <!-- Now the exported "thing" (in this case a router object) is assigned to a variable and used as such.-->
- 现在，导出的 "东西"(在本例中是一个路由器对象)被分配到一个变量中，并按此使用。
+ 现在，导出的 "东西"(在本例中是一个 router 对象)被分配到一个变量中，并按此使用。
 
 </div>
 
@@ -514,13 +492,13 @@ app.listen(PORT, () => {
  如本章节教材前面所示，将应用重构为独立的模块。
 
 <!-- **NB** refactor your application in baby steps and verify that it works after every change you make. If you try to take a "shortcut" by refactoring many things at once, then [Murphy's law](https://en.wikipedia.org/wiki/Murphy%27s_law) will kick in and it is almost certain that something will break in your application. The "shortcut" will end up taking more time than moving forward slowly and systematically. -->
-**注意** 逐步重构您的应用程序，并在每次进行更改后验证它是否有效。如果您尝试通过一次重构许多内容来走“捷径”，那么 [墨菲定律](https://zh.wikipedia.org/wiki/%E5%A7%86%E5%B8%83%E5%AE%B6%E6%B3%95) 将发挥作用，并且几乎可以肯定您的应用程序中会发生一些故障。“捷径”最终将花费比缓慢而系统地前进更多的时间。
+**注意** 逐步重构你的应用程序，并在每次进行更改后验证它是否有效。如果你尝试通过一次重构许多内容来走“捷径”，那么 [墨菲定律](https://zh.wikipedia.org/wiki/%E5%A7%86%E5%B8%83%E5%AE%B6%E6%B3%95) 将发挥作用，并且几乎可以肯定你的应用程序中会发生一些故障。“捷径”最终将花费比缓慢而系统地前进更多的时间。
 
 <!-- One best practice is to commit your code every time it is in a stable state. This makes it easy to rollback to a situation where the application still works. -->
 最佳实践之一是在每次代码处于稳定状态时提交代码。这使得回滚到应用程序仍然可以工作的状态变得容易。
 
 <!-- If you're having issues with <i>content.body</i> being <i>undefined</i> for seemingly no reason, make sure you didn't forget to add <i>app.use(express.json())</i> near the top of the file. -->
-如果您无缘无故地遇到 <i>content.body</i> 为 <i>undefined</i> 的问题，请确保您没有忘记在文件顶部附近添加 <i>app.use(express.json())</i>。
+如果你无缘无故地遇到 <i>content.body</i> 为 <i>undefined</i> 的问题，请确保你没有忘记在文件顶部附近添加 <i>app.use(express.json())</i>。
 </div>
 
 <div class="content">

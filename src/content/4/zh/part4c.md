@@ -7,24 +7,19 @@ lang: zh
 
 <div class="content">
 
-
 <!-- We want to add user authentication and authorization to our application. Users should be stored in the database and every note should be linked to the user who created it. Deleting and editing a note should only be allowed for the user who created it.-->
- 我们想在我们的应用中加入用户认证和授权。用户应该存储在数据库中，每个笔记应该与创建它的用户相联系。删除和编辑一个笔记应该只允许创建它的用户使用。
-
+我们想在我们的应用中加入用户认证和授权。用户应该存储在数据库中，每个笔记应该与创建它的用户相联系。删除和编辑一个笔记应该只允许创建它的用户使用。
 
 <!-- Let's start by adding information about users to the database. There is a one-to-many relationship between the user (<i>User</i>) and notes (<i>Note</i>):-->
- 让我们先把用户的信息添加到数据库中。在用户（<i>User</i>）和笔记（<i>Note</i>）之间有一个一对多的关系。
+让我们先把用户的信息添加到数据库中。在用户（<i>User</i>）和笔记（<i>Note</i>）之间有一个一对多的关系。
 
 ![](https://yuml.me/a187045b.png)
 
-
 <!-- If we were working with a relational database the implementation would be straightforward. Both resources would have their separate database tables, and the id of the user who created a note would be stored in the notes table as a foreign key.-->
- 如果我们使用的是关系型数据库，实现起来就很简单了。这两种资源都有各自独立的数据库表，而创建笔记的用户的ID将作为外键存储在笔记表中。
-
+如果我们使用的是关系型数据库，实现起来就很简单了。这两种资源都有各自独立的数据库表，而创建笔记的用户的ID将作为外键存储在笔记表中。
 
 <!-- When working with document databases the situation is a bit different, as there are many different ways of modeling the situation.-->
 当使用文档数据库时，情况就有点不同了，因为有许多不同的建模方式。
-
 
 <!-- The existing solution saves every note in the <i>notes collection</i> in the database. If we do not want to change this existing collection, then the natural choice is to save users in their own collection,  <i>users</i> for example.-->
  现有的解决方案将每个笔记保存在数据库的<i>笔记集合</i>中。如果我们不想改变这个现有的集合，那么自然的选择是将用户保存在他们自己的集合中，例如<i>users</i>。
@@ -552,11 +547,10 @@ await user.save()
  我们希望我们的API能够以这样的方式工作，即当HTTP GET请求被发送到<i>/api/users</i>路由时，用户对象也将包含用户的笔记内容，而不仅仅是他们的ID。在一个关系型数据库中，这个功能将通过一个<i>连接查询</i>来实现。
 
 <!-- As previously mentioned, document databases do not properly support join queries between collections, but the Mongoose library can do some of these joins for us. Mongoose accomplishes the join by doing multiple queries, which is different from join queries in relational databases which are <i>transactional</i>, meaning that the state of the database does not change during the time that the query is made. With join queries in Mongoose, nothing can guarantee that the state between the collections being joined is consistent, meaning that if we make a query that joins the user and notes collections, the state of the collections may change during the query.-->
- 如前所述，文档数据库并不正确支持集合之间的连接查询，但 Mongoose 库可以为我们做一些这样的连接。Mongoose 通过做多个查询来完成连接，这与关系数据库中的连接查询不同，关系数据库是<i>事务性的</i>，意味着数据库的状态在查询期间不会改变。在 Mongoose 的连接查询中，没有任何东西可以保证被连接的集合之间的状态是一致的，这意味着如果我们做一个连接用户和笔记集合的查询，集合的状态可能在查询过程中发生变化。
-
+如前所述，文档数据库并不正确支持集合之间的连接查询，但 Mongoose 库可以为我们做一些这样的连接。Mongoose 通过做多个查询来完成连接，与关系数据库中的连接查询不同，关系数据库的连接查询是<i>事务性的</i>，意味着数据库的状态在查询期间不会改变。Mongoose 的连接查询不保证被连接的集合之间的状态是一致的，也就是说如果我们做一个连接用户和笔记集合的查询，集合的状态可能在查询过程中发生变化。
 
 <!-- The Mongoose join is done with the [populate](http://mongoosejs.com/docs/populate.html) method. Let's update the route that returns all users first:-->
- Mongoose的连接是通过[populate](http://mongoosejs.com/docs/populate.html)方法完成的。让我们先更新返回所有用户的路线。
+Mongoose 的连接是通过 [populate](http://mongoosejs.com/docs/populate.html) 方法完成的。让我们先更新返回所有用户的路线。
 
 ```js
 usersRouter.get('/', async (request, response) => {
@@ -609,11 +603,10 @@ notesRouter.get('/', async (request, response) => {
 <!-- Now the user's information is added to the <i>user</i> field of note objects.-->
  现在用户的信息被添加到笔记对象的<i>user</i>字段中。
 
-![](../../images/4/15ea.png)
-
+![](../../images/4/15new.png)
 
 <!-- It's important to understand that the database does not actually know that the ids stored in the <i>user</i> field of notes reference documents in the user collection.-->
- 重要的是要明白，数据库并不知道存储在笔记集合的 <i>user</i> 字段中的 id 引用用户集合中的文档。
+重要的是要明白，数据库并不知道存储在笔记集合的 <i>user</i> 字段中的 id 引用的是用户集合中的文档。
 
 <!-- The functionality of the <i>populate</i> method of Mongoose is based on the fact that we have defined "types" to the references in the Mongoose schema with the <i>ref</i> option:-->
  Mongoose 的 <i>populate</i> 方法的功能基于这样一个事实：我们已经使用 <i>ref</i> 选项为 Mongoose 模式中的引用定义了“类型”：

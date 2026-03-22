@@ -804,7 +804,7 @@ part2
 
 <!-- This exercise is not submitted to GitHub, it's enough to just read the tutorial -->
 
-这个练习不用提交GitHub，仅仅阅读教程即可。
+这道练习不用提交GitHub，仅仅阅读教程即可。
 
 <!--   <h4>0.2: CSS</h4>-->
  <h4>0.2: CSS</h4> 
@@ -814,7 +814,7 @@ part2
 
 <!-- This exercise is not submitted to GitHub, it's enough to just read the tutorial -->
 
-这个练习不用提交GitHub，仅仅阅读教程即可。
+这道练习不用提交GitHub，仅仅阅读教程即可。
 
 <!--   <h4>0.3: HTML forms</h4>-->
 
@@ -825,7 +825,7 @@ part2
 
 <!-- This exercise is not submitted to GitHub, it's enough to just read the tutorial -->
 
-这个练习不用提交GitHub，仅仅阅读教程即可。
+这道练习不用提交GitHub，仅仅阅读教程即可。
 
 <!--   <h4>0.4: New note</h4>-->
 
@@ -869,7 +869,7 @@ end note
  该图不一定是一个时序图，任何合理的呈现事件的方式都是可以的。
 
 <!-- All necessary information for doing this, and the next two exercises, can be found from the text of [this part](/en/part0/fundamentals_of_web_apps#forms-and-http-post).-->
-做这个练习以及接下来的另外两个练习所必要的信息都可以从[本章](/en/part0/fundamentals_of_web_apps#forms-and-http-post)的正文中找到。
+做这道练习以及接下来的另外两道练习所必要的信息都可以从[本章](/en/part0/fundamentals_of_web_apps#forms-and-http-post)的正文中找到。
 <!-- The idea of these exercises is to read the text through once more, and to think through what is going on there. Reading the application [code](https://github.com/mluukkai/example_app) is not necessary, but it is of course possible.-->
  这些练习的目的是再一次通读文本，并思考其中的内容。阅读应用的[代码](https://github.com/mluukkai/example_app)不是必须的，但当然也可以。
 
@@ -886,6 +886,6 @@ end note
  创建一个图表，描述用户使用单页版应用创建新笔记的情况。
 
 <!-- This was the last exercise, and it's time to push your answers to GitHub and mark the exercises as done in the [submission system](https://studies.cs.helsinki.fi/stats/courses/fullstackopen).-->
-这是最后一个练习，是时候把你的答案推送到GitHub，并在[提交系统](https://studies.cs.helsinki.fi/stats/courses/fullstackopen)中标记练习完成。
+这是最后一道练习，是时候把你的答案推送到GitHub，并在[提交系统](https://studies.cs.helsinki.fi/stats/courses/fullstackopen)中标记练习完成。
 
 </div>
